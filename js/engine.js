@@ -16,7 +16,7 @@ function startGame() {
 
     enemies = [2];
     enemies[0] = new GravityEnemy(this.myGameArea, "image/trump3.png");
-    enemies[1] = new MoleculaEnemy(this.myGameArea, "image/trump3.png");
+    //enemies[1] = new MoleculaEnemy(this.myGameArea, "image/submarine3.png");
     //enemies[0] = new enemy(30, 30, "red", 300, 120, "monster0.png");
     //enemies[1] = new enemy(30, 30, "green", 120, 300, "monster1.png");
     //enemies[2] = new enemy(30, 30, "blue", 300, 300, "monster2.png");
@@ -27,7 +27,7 @@ function startGame() {
     //enemies[6] = new GravityEnemy(this.myGameArea, "plane.png");
     //enemies[6] = new enemy(100, 100, "blue", 500, 250, "trump3.png");
 
-    //player = new component(30, 30, "gray", 10, 120, "nautical.png");
+    player = new Player(this.myGameArea, "image/submarine3.png")
     //player = new component(50, 50, "gray", 10, 120, "player.png");
     //player = new component(50, 50, "gray", 10, 120, "player.png");
     myBackground = new component(1000, 500, "gray", 0, 0, "image/background.jpg");
@@ -285,28 +285,34 @@ function updateGameArea() {
     //     myBackground.image.src = "win.jpg";
     // }
 
+	
+	
+    for (let i = 0; i < player.bullets.length; i++) {
 
-    // for (let i = 0; i < player.bullets.length; i++) {
+         if (player.bullets[i].x > myGameArea.canvas.width - player.bullets[i].width || player.bullets[i].x < 0) {
+             player.bullets.splice(i, 1);
+         }
 
-    //     if (player.bullets[i].x > myGameArea.canvas.width - player.bullets[i].width || player.bullets[i].x < 0) {
-    //         player.bullets.splice(i, 1);
-    //     }
+         for (let j = 0; j < enemies.length; j++) {
+             if (Collides(player.bullets[i], enemies[j])) {
+                 player.bullets.splice(i, 1);
+                 enemies.splice(j, 1);
+                 scoreNum += 1;
+                 crashSound.play();
+             }
+         }
+     }
 
-    //     for (let j = 0; j < enemies.length; j++) {
-    //         if (Collides(player.bullets[i], enemies[j])) {
-    //             player.bullets.splice(i, 1);
-    //             enemies.splice(j, 1);
-    //             scoreNum += 1;
-    //             crashSound.play();
-    //         }
-    //     }
-    // }
-
-    myGameArea.clear();
-
+    myGameArea.clear();	
 
     myBackground.update();
     //drawScore();
+	
+	
+	this.player.bullets.forEach(function (item, i, enemies) {
+			item.move();
+            item.update();
+        });
 
     enemies.forEach(function (item, i, enemies) {
         item.newPos();
@@ -323,8 +329,8 @@ function updateGameArea() {
     //     player.shoot();
     // }
     // if (myGameArea.keys && myGameArea.keys[80]) { player.protectiveFieldIsOn = !player.protectiveFieldIsOn; }
-    //player.newPos();
-    //player.update();
+    player.newPos();
+    player.update();
 
     //myBackground.newPos();
 
