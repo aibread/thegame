@@ -3,7 +3,9 @@ class Player extends Actor {
         super(gameArea, imageFile);
         this.bulletsCount = 0;
         this.maxBulletCount = 50;
-		this.bullets = [];        
+		this.bullets = [];
+		this.maxLives = 3;
+		this.livesLeft = this.maxLives;
     }
 	
     newPos() {

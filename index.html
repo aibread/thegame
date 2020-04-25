@@ -3,25 +3,42 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta charset=utf-8>
     <link rel="icon" type="image/png" href="image/submarine.png" sizes="64x64" />
     <style>
         canvas {
-            border: 1px solid #d3d3d3;
             background-color: #000000;
         }
+		
+		div.score {
+			background: #3E9ADB;
+			width: 980px;
+			padding: 10px;
+		}
+		
     </style>
 </head>
-<script type="text/javascript" src="js/actor.js"></script>
-<script type="text/javascript" src="js/gravityEnemy.js"></script>
-<script type="text/javascript" src="js/moleculaEnemy.js"></script>
-<script type="text/javascript" src="js/player.js"></script>
-<script type="text/javascript" src="js/engine.js"></script>
-
-<body onload="startGame()">
-    <p id="score" style="position:absolute; top:0px; left:20px"></p>
-    <p id="bullets" style="position:absolute; top:40px; left:20px"></p>
-    <p>Это супер игра, которую написала команда супер программистов.</p>
-    <p>В нее могу играть только настоящие герои.</p>
-</body>
+	<script type="text/javascript" src="js/actor.js"></script>
+	<script type="text/javascript" src="js/gravityEnemy.js"></script>
+	<script type="text/javascript" src="js/crazyGravityEnemy.js"></script>
+	<script type="text/javascript" src="js/moleculaEnemy.js"></script>
+	<script type="text/javascript" src="js/player.js"></script>
+	<script type="text/javascript" src="js/engine.js"></script>
+	<script> 
+	   window.onload = function() {
+		var drawingCanvas = document.getElementById('game');
+		startGame();
+	   }
+	</script>
+</head>
+ <body>
+  <canvas id="game" width="1000" height="500">    
+  </canvas>
+  <div class="score" width="1000px">
+	<p id="lives"></p>
+	<p id="score"></p>
+	<p id="bullets"></p>
+  </div>
+ </body>
 
 </html>

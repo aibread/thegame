@@ -8,15 +8,17 @@ var background;
 let scoreNum = 0;
 
 function startGame() {
+	myGameArea.canvas = document.getElementById('game');
     myGameArea.start();
 
     kick = new sound("audio/bounce.mp3");
     crashSound = new sound("audio/crash.mp3");    
     shotSound = new sound("audio/gunshot.mp3");
 
-    enemies = [2];
-    enemies[0] = new GravityEnemy(this.myGameArea, "image/trump3.png");
-    //enemies[1] = new MoleculaEnemy(this.myGameArea, "image/submarine3.png");
+    enemies = [3];
+    enemies[0] = new CrazyGravityEnemy(this.myGameArea, "image/trump3.png");
+    enemies[1] = new GravityEnemy(this.myGameArea, "image/bowl2.png");
+	enemies[2] = new MoleculaEnemy(this.myGameArea, "image/ihtio.png");
     //enemies[0] = new enemy(30, 30, "red", 300, 120, "monster0.png");
     //enemies[1] = new enemy(30, 30, "green", 120, 300, "monster1.png");
     //enemies[2] = new enemy(30, 30, "blue", 300, 300, "monster2.png");
@@ -34,10 +36,11 @@ function startGame() {
 }
 
 var myGameArea = {
-    canvas: document.createElement("canvas"),
+    //canvas: document.createElement("canvas"), document.getElementById('score')
+	//canvas: document.getElementById('game'),
     start: function () {
-        this.canvas.width = 1000;
-        this.canvas.height = 500;
+        //this.canvas.width = 1000;
+        //this.canvas.height = 500;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);
@@ -302,11 +305,19 @@ function updateGameArea() {
              }
          }
      }
+	
+	for (let j = 0; j < enemies.length; j++) {
+		if (Collides(player, enemies[j])) {
+			 player.livesLeft = player.livesLeft - 1;
+			 player.x = 0;
+			 player.y = 0;			 
+		}
+	}	
 
     myGameArea.clear();	
 
     myBackground.update();
-    //drawScore();
+    drawScore();
 	
 	
 	this.player.bullets.forEach(function (item, i, enemies) {
@@ -359,9 +370,10 @@ function Collides(spriteOne, spriteTwo) {
 }
 
 function drawScore() {
+	let livesLeft = document.getElementById('lives').innerHTML = " У вас осталось " + this.player.livesLeft + " жизней";
     let scoreText = document.getElementById('score').innerHTML = scoreNum + " Монстров подбито";
     let left = this.player.maxBulletCount - this.player.bulletsCount;
-    let bulletsLeft = document.getElementById('bullets').innerHTML = " У вас осталось " + left + " пулек";
+    let bulletsLeft = document.getElementById('bullets').innerHTML = " У вас осталось " + left + " пулек";	
 }
 
 window.addEventListener('keydown', function (event) {
