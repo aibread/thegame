@@ -16,7 +16,7 @@ class Player extends Actor {
 	
 	 shoot() {
         if (this.bulletsCount < this.maxBulletCount) {
-            var bulletObject = new bullet(this.x + this.width, this.y + this.height / 2);
+            var bulletObject = new Bullet(this.myGameArea, "image/bullet.png", this.x + this.width/2, this.y + this.height/2);
             this.bullets.push(bulletObject);
             this.bulletsCount++;
             //shotSound.play();

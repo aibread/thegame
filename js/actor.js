@@ -68,5 +68,14 @@ class Actor {
     getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
     }
+	
+	randomInteger(min, max) {
+		let rand = min - 0.5 + Math.random() * (max - min + 1);
+		return Math.round(rand);
+	}
+	
+	div(val, by){
+		return (val - val % by) / by;
+	}
 
 }

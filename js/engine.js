@@ -1,5 +1,6 @@
 var player;
 var enemies;
+var explosions = [];
 var kick;
 var myMusic;
 var crashSound;
@@ -15,10 +16,12 @@ function startGame() {
     crashSound = new sound("audio/crash.mp3");    
     shotSound = new sound("audio/gunshot.mp3");
 
-    enemies = [3];
+    enemies = [4];
     enemies[0] = new CrazyGravityEnemy(this.myGameArea, "image/trump3.png");
     enemies[1] = new GravityEnemy(this.myGameArea, "image/bowl2.png");
 	enemies[2] = new MoleculaEnemy(this.myGameArea, "image/ihtio.png");
+	enemies[3] = new MoleculaEnemy(this.myGameArea, "image/zombie.png");
+	//enemies[2] = new Explosion(this.myGameArea, "image/explosion.png");
     //enemies[0] = new enemy(30, 30, "red", 300, 120, "monster0.png");
     //enemies[1] = new enemy(30, 30, "green", 120, 300, "monster1.png");
     //enemies[2] = new enemy(30, 30, "blue", 300, 300, "monster2.png");
@@ -194,87 +197,87 @@ function component(width, height, color, x, y, imageFile = "") {
     }
 }
 
-function enemy(width, height, color, x, y, imageFile) {
-    this.gamearea = myGameArea;
-    this.width = width;
-    this.height = height;
+// function enemy(width, height, color, x, y, imageFile) {
+    // this.gamearea = myGameArea;
+    // this.width = width;
+    // this.height = height;
 
-    this.speedX = 1;
-    this.speedY = 1;
+    // this.speedX = 1;
+    // this.speedY = 1;
 
-    if (imageFile != "") {
-        this.image = new Image();
-        this.image.src = imageFile;
-    }
+    // if (imageFile != "") {
+        // this.image = new Image();
+        // this.image.src = imageFile;
+    // }
 
-    this.x = x;
-    this.y = y;
-    this.update = function () {
-        ctx = myGameArea.context;
+    // this.x = x;
+    // this.y = y;
+    // this.update = function () {
+        // ctx = myGameArea.context;
 
-        if (imageFile != "") {
-            ctx.drawImage(this.image,
-                this.x,
-                this.y,
-                this.width, this.height);
-        } else {
-            var radius = 10;
+        // if (imageFile != "") {
+            // ctx.drawImage(this.image,
+                // this.x,
+                // this.y,
+                // this.width, this.height);
+        // } else {
+            // var radius = 10;
 
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI, false);
-            ctx.fillStyle = color;
-            ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = '#FFFFFF';
-            ctx.stroke();
-        }
-    }
+            // ctx.beginPath();
+            // ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI, false);
+            // ctx.fillStyle = color;
+            // ctx.fill();
+            // ctx.lineWidth = 2;
+            // ctx.strokeStyle = '#FFFFFF';
+            // ctx.stroke();
+        // }
+    // }
 
-    this.newPos = function () {
-        if (this.gamearea.canvas.height < this.y || this.y < 0) {
-            this.speedY = -this.speedY;
-            kick.play();
-        }
+    // this.newPos = function () {
+        // if (this.gamearea.canvas.height < this.y || this.y < 0) {
+            // this.speedY = -this.speedY;
+            // kick.play();
+        // }
 
-        if (this.gamearea.canvas.width < this.x || this.x < 0) {
-            this.speedX = -this.speedX;
-            kick.play();
-        }
+        // if (this.gamearea.canvas.width < this.x || this.x < 0) {
+            // this.speedX = -this.speedX;
+            // kick.play();
+        // }
 
-        this.x += this.speedX;
-        this.y += this.speedY;
-    }
-}
+        // this.x += this.speedX;
+        // this.y += this.speedY;
+    // }
+// }
 
-function bullet(x, y) {
-    this.gamearea = myGameArea;
-    this.width = 1;
-    this.height = 1;
+// function bullet(x, y) {
+    // this.gamearea = myGameArea;
+    // this.width = 1;
+    // this.height = 1;
 
-    this.speedX = 1;
-    //this.speedY = 1;    
+    // this.speedX = 1;
+    // //this.speedY = 1;    
 
 
-    this.x = x;
-    this.y = y;
-    this.update = function () {
-        ctx = myGameArea.context;
-        var radius = 3;
+    // this.x = x;
+    // this.y = y;
+    // this.update = function () {
+        // ctx = myGameArea.context;
+        // var radius = 3;
 
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI, false);
-        ctx.fillStyle = "gray";
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.stroke();
-    }
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI, false);
+        // ctx.fillStyle = "gray";
+        // ctx.fill();
+        // ctx.lineWidth = 2;
+        // ctx.strokeStyle = '#FFFFFF';
+        // ctx.stroke();
+    // }
 
-    this.move = function () {
-        this.x += this.speedX;
-        //this.y += this.speedY;        
-    }
-}
+    // this.move = function () {
+        // this.x += this.speedX;
+        // //this.y += this.speedY;        
+    // }
+// }
 
 function updateGameArea() {
 
@@ -299,8 +302,13 @@ function updateGameArea() {
          for (let j = 0; j < enemies.length; j++) {
              if (Collides(player.bullets[i], enemies[j])) {
                  player.bullets.splice(i, 1);
+				 let enemy = enemies[j];
+				 let x = enemy.x;
+				 let y = enemy.y;
+				 var explosion = new Explosion(this.myGameArea, "image/explosion.png", x, y);
                  enemies.splice(j, 1);
-                 scoreNum += 1;
+                 scoreNum += 1;				 
+				 this.explosions.push(explosion);
                  crashSound.play();
              }
          }
@@ -321,7 +329,7 @@ function updateGameArea() {
 	
 	
 	this.player.bullets.forEach(function (item, i, enemies) {
-			item.move();
+			item.newPos();
             item.update();
         });
 
@@ -330,8 +338,14 @@ function updateGameArea() {
         item.update();
     });
 
-    //player.speedX = 0;
-    //player.speedY = 0;
+	for (let j = explosions.length - 1; j >= 0 ; j--) {
+		explosions[j].update();
+		if (explosions[j].complete)
+		{
+			explosions.splice(j, 1);	
+		}		
+	}	
+    
     if (myGameArea.keys && myGameArea.keys[37]) { player.speedX = -2; }
     if (myGameArea.keys && myGameArea.keys[39]) { player.speedX = 2; }
     if (myGameArea.keys && myGameArea.keys[38]) { player.speedY = -2; }
@@ -342,9 +356,6 @@ function updateGameArea() {
     // if (myGameArea.keys && myGameArea.keys[80]) { player.protectiveFieldIsOn = !player.protectiveFieldIsOn; }
     player.newPos();
     player.update();
-
-    //myBackground.newPos();
-
 }
 
 function sound(src) {
